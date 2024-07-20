@@ -1,4 +1,5 @@
 ﻿using App.Application.Departments.Create;
+using App.Application.Departments.Delete;
 using App.Application.Departments.Get;
 using App.Application.Departments.GetAll;
 using App.Application.Departments.Update;
@@ -122,26 +123,35 @@ namespace App.UI.Controllers
             ViewBag.Departments = await GetDepartmentsSelectList(id);
             return View(command);
         }
-
         // GET: DepartmentController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var getDepartmentByIdQuery = new GetDepartmentByIdQuery(id);
+            var departmentResult = await _mediator.Send(getDepartmentByIdQuery);
+
+            if (!departmentResult.Success)
+            {
+                return NotFound();
+            }
+
+            return View(departmentResult.Value);
         }
 
         // POST: DepartmentController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            try
+            var result = await _mediator.Send(new DeleteDepartmentCommand { Id = id });
+
+            if (result.Success)
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            AddModelErrors(result.Errors);
+            var department = await _mediator.Send(new GetDepartmentByIdQuery(id));
+            return View(department.Value);
         }
     }
 }
