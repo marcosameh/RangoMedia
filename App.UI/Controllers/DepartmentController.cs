@@ -1,5 +1,7 @@
 ﻿using App.Application.Departments.Create;
+using App.Application.Departments.Get;
 using App.Application.Departments.GetAll;
+using App.Application.Departments.Update;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +17,25 @@ namespace App.UI.Controllers
             _mediator = mediator;
         }
 
+        private async Task<SelectList> GetDepartmentsSelectList(int? excludeId = null)
+        {
+            var departmentsResult = await _mediator.Send(new GetAllDepartmentsQuery());
+            if (excludeId.HasValue)
+            {
+                var currentDepartment = departmentsResult.Value.Find(x => x.Id == excludeId);
+                departmentsResult.Value.Remove(currentDepartment);
+            }
+            return new SelectList(departmentsResult.Value, "Id", "Name");
+        }
+
+        private void AddModelErrors(IEnumerable<string> errors)
+        {
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(string.Empty, error);
+            }
+        }
+
         // GET: DepartmentController
         public async Task<ActionResult> Index()
         {
@@ -22,17 +43,10 @@ namespace App.UI.Controllers
             return View(departments.Value);
         }
 
-        // GET: DepartmentController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: DepartmentController/Create
         public async Task<ActionResult> Create()
         {
-            var departments = await _mediator.Send(new GetAllDepartmentsQuery());
-            ViewBag.Departments = new SelectList(departments.Value, "Id", "Name");
+            ViewBag.Departments = await GetDepartmentsSelectList();
             return View();
         }
 
@@ -43,8 +57,7 @@ namespace App.UI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var departments = await _mediator.Send(new GetAllDepartmentsQuery());
-                ViewBag.Departments = new SelectList(departments.Value, "Id", "Name");
+                ViewBag.Departments = await GetDepartmentsSelectList();
                 return View(command);
             }
 
@@ -54,31 +67,60 @@ namespace App.UI.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, string.Join(", ", result.Errors));
-            var allDepartments = await _mediator.Send(new GetAllDepartmentsQuery());
-            ViewBag.Departments = new SelectList(allDepartments.Value, "Id", "Name");
+            AddModelErrors(result.Errors);
+            ViewBag.Departments = await GetDepartmentsSelectList();
             return View(command);
         }
 
         // GET: DepartmentController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var departmentResult = await _mediator.Send(new GetDepartmentByIdQuery(id));
+
+            if (!departmentResult.Success)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Departments = await GetDepartmentsSelectList(id);
+
+            var updateDepartmentCommand = new UpdateDepartmentCommand
+            {
+                Id = departmentResult.Value.Id,
+                Name = departmentResult.Value.Name,
+                LogoPath = departmentResult.Value.LogoPath,
+                ParentDepartmentId = departmentResult.Value.ParentDepartmentId
+            };
+
+            return View(updateDepartmentCommand);
         }
 
         // POST: DepartmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, UpdateDepartmentCommand command)
         {
-            try
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = await GetDepartmentsSelectList(id);
+                return View(command);
+            }
+
+            var result = await _mediator.Send(command);
+
+            if (result.Success)
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            AddModelErrors(result.Errors);
+            ViewBag.Departments = await GetDepartmentsSelectList(id);
+            return View(command);
         }
 
         // GET: DepartmentController/Delete/5

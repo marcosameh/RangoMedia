@@ -8,7 +8,8 @@ namespace App.Application.Departments.Update
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IFormFile Logo { get; set; }
+        public IFormFile? Logo { get; set; }
+        public string? LogoPath { get; set; }
         public int? ParentDepartmentId { get; set; }
     }
 }

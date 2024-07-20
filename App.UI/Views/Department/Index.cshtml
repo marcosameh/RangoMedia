@@ -12,6 +12,7 @@
             <th>Name</th>
             <th>Logo</th>
             <th>Parent Department</th>
+            <th>Actions</th> <!-- Add a new column for actions -->
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,10 @@
                 <td>@department.Name</td>
                 <td><img src="~/photos/logo/@department.Logo" alt="@department.Name" width="50" height="50" /></td>
                 <td>@department.ParentDepartmentName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@department.Id" class="btn btn-sm btn-warning">Edit</a>
+                  
+                </td>
             </tr>
         }
     </tbody>
