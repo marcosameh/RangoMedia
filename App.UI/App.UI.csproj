@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Emails\ReminderEmail.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Views\Emails\ReminderEmail.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Hangfire" Version="1.8.14" />
     <PackageReference Include="Hangfire.Core" Version="1.8.14" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.7" />

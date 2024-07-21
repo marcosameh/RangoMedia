@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using RazorLight;
 
-namespace App.Infrastructure.Helpers
+namespace App.UI.Helpers
 {
     public class EmailManager
     {

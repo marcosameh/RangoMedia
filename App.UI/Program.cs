@@ -2,6 +2,7 @@ using App.Domain.Models;
 using App.Application;
 using Microsoft.EntityFrameworkCore;
 using Hangfire;
+using App.UI.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -14,7 +15,7 @@ builder.Services.AddDbContext<RangoMediaContext>(options =>
 builder.Services.AddHangfire(config =>
         config.UseSqlServerStorage(builder.Configuration.GetConnectionString("RangoConnection")));
 builder.Services.AddHangfireServer();
-
+builder.Services.AddScoped<EmailManager>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
