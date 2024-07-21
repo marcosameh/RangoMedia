@@ -1,0 +1,29 @@
+﻿@model IEnumerable<App.Application.Reminders.ReminderDto>
+
+@{
+    ViewData["Title"] = "Reminders";
+}
+
+<h1>Reminders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Reminder DateTime</th>
+            <th>Email Sent</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reminder in Model)
+        {
+            <tr>
+                <td>@reminder.Title</td>
+                <td>@reminder.ReminderDateTime</td>
+                <td>@reminder.IsEmailSent</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Create New Reminder</a>

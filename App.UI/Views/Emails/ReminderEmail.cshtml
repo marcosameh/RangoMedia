@@ -1,0 +1,51 @@
+﻿@model App.Application.Reminders.Create.CreateReminderCommand
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .header {
+            background-color: #f5f5f5;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Reminder</h2>
+        </div>
+        <div class="content">
+            <p>Dear @Model.Title,</p>
+            <p>This is a reminder for your upcoming event scheduled at @Model.ReminderDateTime.ToString("f").</p>
+            <p>Thank you!</p>
+        </div>
+        <div class="footer">
+            <p>Best regards,</p>
+            <p>Marco</p>
+        </div>
+    </div>
+</body>
+</html>

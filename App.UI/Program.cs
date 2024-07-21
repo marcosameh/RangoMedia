@@ -1,6 +1,7 @@
 using App.Domain.Models;
 using App.Application;
 using Microsoft.EntityFrameworkCore;
+using Hangfire;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -10,6 +11,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<RangoMediaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RangoConnection")));
+builder.Services.AddHangfire(config =>
+        config.UseSqlServerStorage(builder.Configuration.GetConnectionString("RangoConnection")));
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -24,7 +28,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+app.UseHangfireDashboard();
 app.UseAuthorization();
 
 app.MapControllerRoute(

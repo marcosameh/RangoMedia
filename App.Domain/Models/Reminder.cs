@@ -12,4 +12,6 @@ public partial class Reminder
     public string Title { get; set; }
 
     public DateTime Date { get; set; }
+
+    public bool IsEmailSent { get; set; }
 }
