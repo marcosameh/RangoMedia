@@ -20,7 +20,7 @@ namespace App.UI.BackgroundJobs
                 var htmlContent = await _emailManager.RenderTemplateAsync("ReminderEmail.cshtml", command);
 
                 // Send the email
-                await _emailManager.SendEmail("Reminder Notification", new[] { "marcosameh678@gmail.com" }, htmlContent);
+                await _emailManager.SendEmailAsync("Reminder Notification", new[] { "marcosameh678@gmail.com" }, htmlContent);
             }
             catch (Exception ex)
 
