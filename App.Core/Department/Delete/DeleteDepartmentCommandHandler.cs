@@ -37,7 +37,7 @@ namespace App.Application.Departments.Delete
 
             _context.Departments.Remove(department);
             await _context.SaveChangesAsync(cancellationToken);
-
+            //TODO:remove Photos from Physical Path 
             return Result.Ok("Department deleted successfully.");
         }
     }
