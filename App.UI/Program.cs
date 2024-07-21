@@ -2,7 +2,7 @@ using App.Domain.Models;
 using App.Application;
 using Microsoft.EntityFrameworkCore;
 using Hangfire;
-using App.UI.Helpers;
+using App.Infrastructure.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 

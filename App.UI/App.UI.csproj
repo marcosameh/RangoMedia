@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Views\Emails\ReminderEmail.cshtml" />
+		<EmbeddedResource Include="Views\MailTemplates\ReminderEmail.cshtml" />
 	</ItemGroup>
 
 	<ItemGroup>

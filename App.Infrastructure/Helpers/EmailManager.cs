@@ -1,8 +1,8 @@
 ﻿using App.Infrastructure.Common;
 using Microsoft.Extensions.Configuration;
 using RazorLight;
-
-namespace App.UI.Helpers
+using static ElasticEmailClient.Api;
+namespace App.Infrastructure.Helpers
 {
     public class EmailManager
     {
@@ -10,28 +10,30 @@ namespace App.UI.Helpers
 
         public string FromEmail { get; set; }
         public string FromName { get; set; }
-        public string ApiKey { get; set; }
+        public string MailTemplatePhysicalPath { get; set; }
+       
 
         public EmailManager(IConfiguration config)
         {
             ApiKey = config.GetSection("MailSettings:APIKey").Value;
             FromName = config.GetSection("MailSettings:FromName").Value;
             FromEmail = config.GetSection("MailSettings:FromEmail").Value;
-
+            MailTemplatePhysicalPath = config.GetSection("MailSettings:ReminderEmailPhysicalPath").Value;
             // Configure RazorLight with debug mode for detailed error information
             _razorEngine = new RazorLightEngineBuilder()
-    .UseFileSystemProject("D:/Study/RangoMedia/App.UI/Views")
+    .UseFileSystemProject(MailTemplatePhysicalPath)
     .UseMemoryCachingProvider()
     .Build();
 
-          
+
         }
 
         public async Task<Result> SendEmail(string subject, string[] msgTo, string html)
         {
             try
             {
-                await ElasticEmailClient.Api.Email.SendAsync(subject, FromEmail, FromName, msgTo: msgTo, bodyHtml: html);
+
+                await Email.SendAsync(subject, FromEmail, FromName, msgTo: msgTo, bodyHtml: html);
                 return Result.Ok();
             }
             catch (Exception ex)

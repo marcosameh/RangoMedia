@@ -21,8 +21,8 @@ namespace App.Application.Reminders.GetAll
                 {
                     Id = r.Id,
                     Title = r.Title,
-                    ReminderDateTime = r.Date,
-                    IsEmailSent = r.IsEmailSent
+                    ReminderDateTime = r.Date
+                   
                 })
                 .ToListAsync(cancellationToken);
 

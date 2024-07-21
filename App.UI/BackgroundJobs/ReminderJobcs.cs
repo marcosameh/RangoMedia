@@ -1,6 +1,5 @@
 ﻿using App.Application.Reminders.Create;
 using App.Infrastructure.Helpers;
-using App.UI.Helpers;
 
 namespace App.UI.BackgroundJobs
 {
@@ -18,13 +17,13 @@ namespace App.UI.BackgroundJobs
             try
             {
                 // Ensure template path is correct
-                var htmlContent = await _emailManager.RenderTemplateAsync("/Emails/ReminderEmail.cshtml", command);
+                var htmlContent = await _emailManager.RenderTemplateAsync("ReminderEmail.cshtml", command);
 
                 // Send the email
                 await _emailManager.SendEmail("Reminder Notification", new[] { "marcosameh678@gmail.com" }, htmlContent);
             }
             catch (Exception ex)
-               
+
             {
                 // Log or handle exceptions
                 throw new Exception($"Failed to send reminder email: {ex.Message}", ex);
